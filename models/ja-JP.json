@@ -1,0 +1,100 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "カロリーゼロ",
+            "intents": [
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": [
+                        "おわり",
+                        "終了",
+                        "ログアウト",
+                        "クローズ",
+                        "ありがとう",
+                        "もういいよ",
+                        "とじて",
+                        "とじる",
+                        "ばいばい",
+                        "バイバイ",
+                        "ばいバイ",
+                        "バイばい",
+                        "もういい",
+                        "いらない",
+                        "終わって",
+                        "やめて",
+                        "消えて",
+                        "きえて",
+                        "消えろ",
+                        "とまって",
+                        "止まれ",
+                        "とまる",
+                        "ていし",
+                        "終われ",
+                        "おわれ",
+                        "しゅうりょう",
+                        "ありがと",
+                        "さよなら",
+                        "サヨナラ",
+                        "さようなら",
+                        "サヨウナラ"
+                    ]
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": [
+                        "ヘルプを教えて",
+                        "使い方知りたい",
+                        "使い方を知りたい",
+                        "使い方教えて",
+                        "使い方を教えて",
+                        "どうやって使うの",
+                        "何ていえばいい",
+                        "問い合わせ",
+                        "わからない",
+                        "助けて",
+                        "ヘルプミー",
+                        "意味不明",
+                        "いみふ",
+                        "イミフ",
+                        "ヘルプ"
+                    ]
+                },
+                {
+                    "name": "WordIntent",
+                    "slots": [
+                        {
+                            "name": "Query",
+                            "type": "AMAZON.SearchQuery"
+                        }
+                    ],
+                    "samples": [
+                        "カロリーゼロ理論について教えて",
+                        "ゼロカロリー理論について教えて",
+                        "{Query} を食べた",
+                        "{Query} はどう",
+                        "{Query} ってカロリーある",
+                        "{Query} を食べた",
+                        "{Query} は"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                }
+            ],
+            "types": []
+        }
+    }
+}
