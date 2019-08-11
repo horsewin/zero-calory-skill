@@ -61,8 +61,6 @@ typings/
 /.ask/
 /lambda/custom/driver.js
 /UnitJson/
-/lambda/custom/*.js
-/lambda/custom/*.js.map
-lambda/custom/data/state.js
-lambda/custom/data/state.js.map
+/lambda/custom/**/*.js
+/lambda/custom/**/*.js.map
 package-lock.json
