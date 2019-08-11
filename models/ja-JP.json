@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "カロリーゼロ",
+            "invocationName": "カロリーゼロ理論",
             "intents": [
                 {
                     "name": "AMAZON.YesIntent",
@@ -82,10 +82,18 @@
                     "samples": [
                         "カロリーゼロ理論について教えて",
                         "ゼロカロリー理論について教えて",
+                        "カロリーゼロについて教えて",
+                        "ゼロカロリーについて教えて",
+                        "カロリーゼロについて知りたい",
+                        "ゼロカロリーについて知りたい",
                         "{Query} を食べた",
+                        "{Query} 食べた",
+                        "{Query} をたべた",
+                        "{Query} たべた",
                         "{Query} はどう",
+                        "{Query} てカロリーある",
                         "{Query} ってカロリーある",
-                        "{Query} を食べた",
+                        "{Query} のカロリー",
                         "{Query} は"
                     ]
                 },

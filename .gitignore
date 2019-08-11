@@ -64,3 +64,4 @@ typings/
 /lambda/custom/**/*.js
 /lambda/custom/**/*.js.map
 package-lock.json
+/test.json

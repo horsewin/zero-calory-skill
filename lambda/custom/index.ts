@@ -4,26 +4,19 @@ import * as Alexa from "ask-sdk-core";
 import {IntentRequest, RequestEnvelope} from "ask-sdk-model";
 import * as util from "util";
 import MEIGEN from "./data/meigen";
-import STATE from "./data/state";
 import MESSAGE from "./message";
 
-/**
- * エンティティ解決時の成功コード
- * @type {string}
- */
-const ER_SUCCESS_MATCH = "ER_SUCCESS_MATCH";
-
-/**
- * エンティティ解決時の失敗コード
- * @type {string}
- */
-const ER_SUCCESS_NO_MATCH = "ER_SUCCESS_NO_MATCH";
-
-// ------------------------------------------------------
+const dynamoAdapter = require('ask-sdk-dynamodb-persistence-adapter');
+const config = {tableName: 'zero-calory-skill', createTable: true};
+const dynamoDBAdapter = new dynamoAdapter.DynamoDbPersistenceAdapter(config);
 
 let skill: Alexa.Skill;
 
-/* LAMBDA SETUP */
+/**
+ * Lambda Setup
+ * @param event
+ * @param context
+ */
 exports.handler = async (event: RequestEnvelope, context: any) => {
   console.log(JSON.stringify(event, null, 2));
   if (!skill) {
@@ -31,28 +24,43 @@ exports.handler = async (event: RequestEnvelope, context: any) => {
       .addRequestHandlers(
         LaunchRequestHandler,
         YesHandler,
+        ActionHandler,
         HelpHandler,
         ExitHandler,
         SessionEndedRequestHandler,
       )
       .addErrorHandlers(ErrorHandler)
+      .withPersistenceAdapter(dynamoDBAdapter)
       .create();
   }
   return skill.invoke(event, context);
 };
 
+/**
+ *
+ */
 const LaunchRequestHandler = {
   canHandle(handlerInput: Alexa.HandlerInput) {
-    return handlerInput.requestEnvelope.request.type === `LaunchRequest`;
+    return isIntentType(handlerInput, `LaunchRequest`);
   },
-  handle(handlerInput: Alexa.HandlerInput) {
-    // Dynamoチェック
-    const speak = MESSAGE.first.speak;
-    const reprompt = MESSAGE.first.reprompt;
+  async handle(handlerInput: Alexa.HandlerInput) {
+    const date = new Date();
 
-    handlerInput.attributesManager.setSessionAttributes({
-      STATE: STATE.LOOPBACK,
-    });
+    // Dynamoチェック
+    let attributes = await handlerInput.attributesManager.getPersistentAttributes()
+
+    let speak = MESSAGE.first.speak;
+    let reprompt = MESSAGE.first.reprompt;
+
+    if (attributes) {
+      const index = randomInt(MESSAGE.login.speak.length - 1);
+      speak = MESSAGE.login.speak[index];
+      reprompt = MESSAGE.login.reprompt[index];
+    }
+
+    attributes.timestamp = date.toUTCString();
+    handlerInput.attributesManager.setPersistentAttributes(attributes);
+    await handlerInput.attributesManager.savePersistentAttributes();
 
     return handlerInput.responseBuilder
       .speak(`カロリーゼロ理論です。${speak}`)
@@ -63,23 +71,48 @@ const LaunchRequestHandler = {
 
 const YesHandler = {
   canHandle(handlerInput: Alexa.HandlerInput) {
-    console.log("Inside YesHandler");
-    const request = handlerInput.requestEnvelope.request;
-    return request.type === "IntentRequest" &&
-      request.intent.name === "AMAZON.YesIntent";
+    return isIntentType(handlerInput, "IntentRequest") &&
+      isIntentName(handlerInput, "AMAZON.YesIntent");
   },
   handle(handlerInput: Alexa.HandlerInput) {
-    console.log("yes");
     const speak = MESSAGE.meigen.speak;
-    const contentIndex = "糖分";
+
+    const meigenList = Object.keys(MEIGEN);
+    const contentIndex = meigenList[randomInt(meigenList.length - 1)];
+    // @ts-ignore
     const meigen = MEIGEN[contentIndex];
-    console.log(meigen);
     return handlerInput.responseBuilder
       .speak(util.format(speak, contentIndex, meigen))
       .withShouldEndSession(true)
       .getResponse();
   },
 };
+
+const ActionHandler = {
+  canHandle(handlerInput: Alexa.HandlerInput) {
+    return isIntentType(handlerInput, "IntentRequest") &&
+      isIntentName(handlerInput, "WordIntent");
+  },
+  handle(handlerInput: Alexa.HandlerInput) {
+    const speak = MESSAGE.meigen.speak;
+
+    const meigenList = Object.keys(MEIGEN);
+
+    const word = Alexa.getSlotValue(handlerInput.requestEnvelope, "Query");
+    console.log(word);
+
+
+    const contentIndex = meigenList.includes(word) ? word : meigenList[randomInt(meigenList.length - 1)];
+
+    // @ts-ignore
+    const meigen = MEIGEN[contentIndex];
+    return handlerInput.responseBuilder
+      .speak(util.format(speak, contentIndex, meigen))
+      .withShouldEndSession(true)
+      .getResponse();
+  },
+};
+
 
 const HelpHandler = {
   canHandle(handlerInput: Alexa.HandlerInput) {
@@ -102,7 +135,8 @@ const ExitHandler = {
     const request = handlerInput.requestEnvelope.request;
     const hasStop = request.type === `IntentRequest` && (
       request.intent.name === "AMAZON.StopIntent" ||
-      request.intent.name === "AMAZON.CancelIntent"
+      request.intent.name === "AMAZON.CancelIntent" ||
+      request.intent.name === "AMAZON.NoIntent"
     );
 
     return hasStop;
@@ -153,12 +187,32 @@ const ErrorHandler = {
 
 /**
  *
+ * @param handlerInput
+ * @param targetType
+ */
+const isIntentType = (handlerInput: Alexa.HandlerInput, targetType: string): boolean => Alexa.getRequestType(handlerInput.requestEnvelope) === targetType;
+
+/**
+ *
+ * @param handlerInput
+ * @param targetName
+ */
+const isIntentName = (handlerInput: Alexa.HandlerInput, targetName: string): boolean => Alexa.getIntentName(handlerInput.requestEnvelope) === targetName;
+
+/**
+ *
+ * @param maximum
+ */
+const randomInt = (maximum: number) => Math.floor(Math.random() * (maximum + 1));
+
+/**
+ *
  * @param slot
  * @returns {boolean}
  */
 const CustomValidator = (slot: any): boolean => {
   if (slot && slot.resolutions) {
-    return slot.resolutions.resolutionsPerAuthority[0].status.code === ER_SUCCESS_MATCH;
+    return slot.resolutions.resolutionsPerAuthority[0].status.code === "ER_SUCCESS_MATCH";
   } else if (slot && slot.value) {
     return true;
   }

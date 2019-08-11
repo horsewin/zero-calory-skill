@@ -16,3 +16,6 @@ log:
 submit:
 	$(eval SKILLID := $(shell cat .ask/config | jq '.deploy_settings.default.skill_id'))
 	ask api submit --skill-id $(SKILLID) -p arumon-alexa
+
+test:
+	ask dialog -p arumon-alexa -r test.json
