@@ -10,6 +10,9 @@ const dynamoAdapter = require('ask-sdk-dynamodb-persistence-adapter');
 const config = {tableName: 'zero-calory-skill', createTable: true};
 const dynamoDBAdapter = new dynamoAdapter.DynamoDbPersistenceAdapter(config);
 
+const smallImageUri = "https://arumon-alexa-bucket.s3-ap-northeast-1.amazonaws.com/zero-calory/108x108.png";
+const largeImageUri = "https://arumon-alexa-bucket.s3-ap-northeast-1.amazonaws.com/zero-calory/512x512.png";
+
 let skill: Alexa.Skill;
 
 /**
@@ -88,7 +91,7 @@ const YesHandler = {
     const message = util.format(speak, contentIndex, meigen)
     return handlerInput.responseBuilder
       .speak(message)
-      .withSimpleCard("今日の理論", message)
+      .withStandardCard("今日の理論", meigen, smallImageUri, largeImageUri)
       .withShouldEndSession(true)
       .getResponse();
   },
@@ -115,7 +118,7 @@ const ActionHandler = {
     const message = util.format(speak, contentIndex, meigen);
     return handlerInput.responseBuilder
       .speak(message)
-      .withSimpleCard(contentIndex, message)
+      .withStandardCard(contentIndex, meigen, smallImageUri, largeImageUri)
       .withShouldEndSession(true)
       .getResponse();
   },
