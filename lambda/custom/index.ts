@@ -32,7 +32,7 @@ exports.handler = async (event: RequestEnvelope, context: any) => {
         SessionEndedRequestHandler,
       )
       .addErrorHandlers(ErrorHandler)
-      .addRequestInterceptors(requestInteceptor)
+      .addRequestInterceptors(requestInterceptor)
       .withPersistenceAdapter(dynamoDBAdapter)
       .create();
   }
@@ -206,7 +206,7 @@ const ErrorHandler = {
   },
 };
 
-const requestInteceptor = {
+const requestInterceptor = {
   process(handlerInput: Alexa.HandlerInput) {
     console.log(JSON.stringify(handlerInput.requestEnvelope, null , "\t"))
   }
