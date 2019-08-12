@@ -52,7 +52,7 @@ const LaunchRequestHandler = {
     let speak = MESSAGE.first.speak;
     let reprompt = MESSAGE.first.reprompt;
 
-    if (attributes) {
+    if (attributes.timestamp) {
       const index = randomInt(MESSAGE.login.speak.length - 1);
       speak = MESSAGE.login.speak[index];
       reprompt = MESSAGE.login.reprompt[index];
@@ -84,8 +84,11 @@ const YesHandler = {
     const contentIndex = meigenList[randomInt(meigenList.length - 1)];
     // @ts-ignore
     const meigen = MEIGEN[contentIndex];
+
+    const message = util.format(speak, contentIndex, meigen)
     return handlerInput.responseBuilder
-      .speak(util.format(speak, contentIndex, meigen))
+      .speak(message)
+      .withSimpleCard("今日の理論", message)
       .withShouldEndSession(true)
       .getResponse();
   },
@@ -108,8 +111,11 @@ const ActionHandler = {
 
     // @ts-ignore
     const meigen = MEIGEN[contentIndex];
+
+    const message = util.format(speak, contentIndex, meigen);
     return handlerInput.responseBuilder
-      .speak(util.format(speak, contentIndex, meigen))
+      .speak(message)
+      .withSimpleCard(contentIndex, message)
       .withShouldEndSession(true)
       .getResponse();
   },

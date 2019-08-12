@@ -18,13 +18,13 @@ const MESSAGE = {
     reprompt: "カレーを食べた、のように話しかけてみてください。何を食べましたか？",
   },
   meigen: {
-    speak: "実は、%s%s。<say-as interpret-as=\"interjection\">なんちゃって</say-as>。<say-as interpret-as=\"interjection\">またね</say-as>。",
+    speak: "実は、%s%s。<break time=\"1500ms\"/> <say-as interpret-as=\"interjection\">なんちゃって</say-as>。<say-as interpret-as=\"interjection\">またね</say-as>。",
   },
   exit: {
     speak: "<say-as interpret-as=\"interjection\">またいつでも聞いてください</say-as>",
   },
   help: {
-    speak: "カロリーゼロ理論というカロリーの理論を覆すとんでもない理論について説明します。聞いてみますか？",
+    speak: "カロリーゼロ理論という、カロリーの理論を覆す、驚異の理論について説明します。聞いてみますか？",
     reprompt: "カロリーゼロ理論について聞いてみませんか？",
   },
 };
