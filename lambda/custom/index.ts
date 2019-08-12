@@ -18,7 +18,6 @@ let skill: Alexa.Skill;
  * @param context
  */
 exports.handler = async (event: RequestEnvelope, context: any) => {
-  console.log(JSON.stringify(event, null, 2));
   if (!skill) {
     skill = Alexa.SkillBuilders.custom()
       .addRequestHandlers(
@@ -30,6 +29,7 @@ exports.handler = async (event: RequestEnvelope, context: any) => {
         SessionEndedRequestHandler,
       )
       .addErrorHandlers(ErrorHandler)
+      .addRequestInterceptors(requestInteceptor)
       .withPersistenceAdapter(dynamoDBAdapter)
       .create();
   }
@@ -69,6 +69,9 @@ const LaunchRequestHandler = {
   },
 };
 
+/**
+ *
+ */
 const YesHandler = {
   canHandle(handlerInput: Alexa.HandlerInput) {
     return isIntentType(handlerInput, "IntentRequest") &&
@@ -88,6 +91,9 @@ const YesHandler = {
   },
 };
 
+/**
+ *
+ */
 const ActionHandler = {
   canHandle(handlerInput: Alexa.HandlerInput) {
     return isIntentType(handlerInput, "IntentRequest") &&
@@ -97,11 +103,7 @@ const ActionHandler = {
     const speak = MESSAGE.meigen.speak;
 
     const meigenList = Object.keys(MEIGEN);
-
     const word = Alexa.getSlotValue(handlerInput.requestEnvelope, "Query");
-    console.log(word);
-
-
     const contentIndex = meigenList.includes(word) ? word : meigenList[randomInt(meigenList.length - 1)];
 
     // @ts-ignore
@@ -113,7 +115,9 @@ const ActionHandler = {
   },
 };
 
-
+/**
+ *
+ */
 const HelpHandler = {
   canHandle(handlerInput: Alexa.HandlerInput) {
     const request = handlerInput.requestEnvelope.request;
@@ -130,6 +134,9 @@ const HelpHandler = {
   },
 };
 
+/**
+ *
+ */
 const ExitHandler = {
   canHandle(handlerInput: Alexa.HandlerInput) {
     const request = handlerInput.requestEnvelope.request;
@@ -149,6 +156,9 @@ const ExitHandler = {
   },
 };
 
+/**
+ *
+ */
 const SessionEndedRequestHandler = {
   canHandle(handlerInput: Alexa.HandlerInput) {
     console.log("Inside SessionEndedRequestHandler");
@@ -160,6 +170,9 @@ const SessionEndedRequestHandler = {
   },
 };
 
+/**
+ *
+ */
 const ErrorHandler = {
   canHandle() {
     console.log("Inside ErrorHandler");
@@ -172,18 +185,23 @@ const ErrorHandler = {
     if (handlerInput && handlerInput.requestEnvelope && handlerInput.requestEnvelope.session) {
       const isNew = handlerInput.requestEnvelope.session.new;
       if (isNew) {
-        // LaunchHandlerで処理をする
-      } else {
-        // それ以外なのでエラー処理をする
+        return LaunchRequestHandler.handle(handlerInput);
       }
     }
 
+    // エラー応答
     return handlerInput.responseBuilder
       .speak(MESSAGE.error.speak)
       .reprompt(MESSAGE.error.reprompt)
       .getResponse();
   },
 };
+
+const requestInteceptor = {
+  process(handlerInput: Alexa.HandlerInput) {
+    console.log(JSON.stringify(handlerInput.requestEnvelope, null , "\t"))
+  }
+}
 
 /**
  *
@@ -217,25 +235,4 @@ const CustomValidator = (slot: any): boolean => {
     return true;
   }
   return false;
-};
-
-/**
- *
- * @param slot
- * @returns {*|boolean}
- * @constructor
- */
-const Validator = (slot: any): boolean => {
-  return slot && slot.value && slot.value !== "?";
-};
-
-/**
- *
- * @param handlerInput
- */
-const supportsDisplay = (handlerInput: Alexa.HandlerInput): boolean => {
-  return !!(handlerInput.requestEnvelope.context && handlerInput.requestEnvelope.context.System &&
-    handlerInput.requestEnvelope.context.System.device &&
-    handlerInput.requestEnvelope.context.System.device.supportedInterfaces &&
-    handlerInput.requestEnvelope.context.System.device.supportedInterfaces.Display);
 };
