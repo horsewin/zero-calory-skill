@@ -3,19 +3,27 @@
     "publishingInformation": {
       "locales": {
         "ja-JP": {
-          "summary": "Sample Short Description",
+          "summary": "巷で有名な根拠ゼロの理論で様々な食べ物をカロリーゼロにしていく、「カロリーゼロ理論」の内容をお届けするスキルです。",
           "examplePhrases": [
-            "Alexa open hello world",
-            "hello",
-            "help"
+            "アレクサ、カロリーゼロ理論を開いて",
+            "カレー",
+            "カレーってカロリーある"
           ],
           "name": "カロリーゼロ理論",
-          "description": "Sample Full Description"
+          "description": "・スキル概要 \nカロリーゼロ理論について教えてくれるスキルです。\n\n・スキル内容\n巷で有名な根拠ゼロの理論で様々な食べ物をカロリーゼロにしていく、「カロリーゼロ理論」の内容をお届けします。一般的な内容から一部食べ物の固有名詞に対応した内容もお届けします。\n\n・注意\nこのツールは医学的な助言を行うものではなく、あくまで情報や知識の提供のみを目的とするものであり、医師の助言、診療、または診断に代わるものではありません。医学的な助言を受けるには医師にご相談ください。\n",
+          "keywords": [
+            "ヘルスケア",
+            "フード",
+            "カロリー",
+            "カロリーゼロ"
+          ],
+          "smallIconUri": "https://arumon-alexa-bucket.s3-ap-northeast-1.amazonaws.com/zero-calory/108x108.png",
+          "largeIconUri": "https://arumon-alexa-bucket.s3-ap-northeast-1.amazonaws.com/zero-calory/512x512.png"
         }
       },
       "isAvailableWorldwide": true,
       "testingInstructions": "Sample Testing Instructions.",
-      "category": "KNOWLEDGE_AND_TRIVIA",
+      "category": "HEALTH_AND_FITNESS",
       "distributionCountries": []
     },
     "apis": {
@@ -26,6 +34,18 @@
         }
       }
     },
-    "manifestVersion": "1.0"
+    "manifestVersion": "1.0",
+    "privacyAndCompliance": {
+      "allowsPurchases": false,
+      "usesPersonalInfo": false,
+      "isChildDirected": false,
+      "isExportCompliant": true,
+      "containsAds": false,
+      "locales": {
+        "ja-JP": {
+          "privacyPolicyUrl": "https://docs.google.com/document/d/1-AA6El9jsghlpTIEZJQkyWEUjcc_eySN4VZ4sktZSxY/edit?usp=sharing"
+        }
+      }
+    }
   }
 }
