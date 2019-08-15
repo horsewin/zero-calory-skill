@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "カロリーゼロ理論",
+            "invocationName": "ゼロカロリーの話",
             "intents": [
                 {
                     "name": "AMAZON.YesIntent",
@@ -10,7 +10,6 @@
                         "聞く",
                         "聞きたい",
                         "教えて",
-                        "おしえて",
                         "お願い",
                         "きいてみる",
                         "きく",
@@ -113,7 +112,17 @@
                         "{Query} てカロリーある",
                         "{Query} ってカロリーある",
                         "{Query} のカロリー",
-                        "{Query} は"
+                        "{Query} は",
+                        "{Query} を聞いてみる",
+                        "{Query} を聞く",
+                        "{Query} を聞きたい",
+                        "{Query} を教えて",
+                        "{Query} をお願い",
+                        "{Query} をきいてみる",
+                        "{Query} をきく",
+                        "{Query} をききたい",
+                        "{Query} をおしえて",
+                        "{Query} をおねがい"
                     ]
                 },
                 {
